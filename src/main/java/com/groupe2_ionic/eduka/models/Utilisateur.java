@@ -29,6 +29,7 @@ public abstract class Utilisateur {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleUser role;
 
