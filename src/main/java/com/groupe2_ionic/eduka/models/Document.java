@@ -1,5 +1,6 @@
 package com.groupe2_ionic.eduka.models;
 
+import com.groupe2_ionic.eduka.models.enums.TypeDocument;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,12 +17,17 @@ public class Document {
     @Column(name = "id_document")
     private int id;
 
+    @Deprecated
     private String type;
 
     private String url;
 
     @Column(nullable = false)
     private LocalDate date;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TypeDocument typeDocument;
 
     // Un document peut être lié à un rapport.
     @ManyToOne
