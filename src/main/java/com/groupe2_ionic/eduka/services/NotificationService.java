@@ -1,10 +1,7 @@
 package com.groupe2_ionic.eduka.services;
 
 import com.groupe2_ionic.eduka.dto.NotificationResponseDto;
-import com.groupe2_ionic.eduka.models.Notification;
-import com.groupe2_ionic.eduka.models.Organisation;
-import com.groupe2_ionic.eduka.models.Parrain;
-import com.groupe2_ionic.eduka.models.Utilisateur;
+import com.groupe2_ionic.eduka.models.*;
 import com.groupe2_ionic.eduka.repository.NotificationRepository;
 import com.groupe2_ionic.eduka.repository.UtilisateurRepository;
 import com.groupe2_ionic.eduka.services.utilitaires.EmailService;
@@ -221,6 +218,59 @@ public class NotificationService {
 
         notificationRepository.deleteAllByDestinataireId(utilisateurId);
     }
+
+    /**
+     * Notifie les parties concernées lors d'un nouveau parrainage
+     */
+    public void notifierNouveauParrainage(Parrainage parrainage) {
+        if (parrainage == null || parrainage.getParrain() == null || parrainage.getEnfant() == null) {
+            throw new IllegalArgumentException("Le parrainage, le parrain et l'enfant ne peuvent pas être null");
+        }
+
+        Parrain parrain = parrainage.getParrain();
+        String nomEnfant = parrainage.getEnfant().getPrenom() + " " + parrainage.getEnfant().getNom();
+        String nomParrain = parrain.getPrenom() + " " + parrain.getNom();
+
+        // Notification au parrain
+        String sujetParrain = "Nouveau parrainage confirmé";
+        String messageParrain = String.format(
+                "Félicitations %s ! Votre parrainage avec %s a été confirmé. " +
+                        "Vous pouvez maintenant suivre l'évolution de votre filleul(e) depuis votre tableau de bord.",
+                nomParrain, nomEnfant
+        );
+
+        envoyerNotification(parrain, sujetParrain, messageParrain, true, true);
+
+        // Notification à l'organisation si elle existe
+        if (parrainage.getEnfant().getOrganisation() != null) {
+            Organisation organisation = parrainage.getEnfant().getOrganisation();
+            String sujetOrg = "Nouveau parrainage établi";
+            String messageOrg = String.format(
+                    "Un nouveau parrainage a été établi entre %s et %s (%s). " +
+                            "Montant total: %s. Vous pouvez maintenant commencer le suivi.",
+                    nomParrain, nomEnfant, parrainage.getEnfant().getEcole(),
+                    parrainage.getMontantTotal()
+            );
+
+            envoyerNotification(organisation, sujetOrg, messageOrg, true, false);
+        }
+
+        // Notification au tuteur si consentement accordé
+       /* if (parrainage.getEnfant().getTuteur() != null
+                // && parrainage.getEnfant().getTuteur().getConsentementPedagogique()
+        ) {
+
+            String sujetTuteur = "Nouveau parrainage pour votre enfant";
+            String messageTuteur = String.format(
+                    "Bonne nouvelle ! %s a trouvé un parrain/marraine : %s. " +
+                            "Ce parrainage permettra de soutenir l'éducation de votre enfant.",
+                    nomEnfant, nomParrain
+            );
+
+            envoyerNotification(parrainage.getEnfant().getTuteur(), sujetTuteur, messageTuteur, true, true);
+        }*/
+    }
+
 
     /**
      * Mappe une entité Notification vers un DTO de réponse

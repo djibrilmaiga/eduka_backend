@@ -16,9 +16,13 @@ import java.util.Map;
 public class SmsService {
 
     private final RestTemplate restTemplate;
+    private final SmsProviderService smsProviderService;
 
     @Value("${sms.provider:ORANGE_SMS}")
     private String smsProvider;
+
+    @Value("${sms.use.free.provider:false}")
+    private boolean useFreeProvider;
 
     @Value("${sms.orange.api.url:https://api.orange.com/smsmessaging/v1/outbound}")
     private String orangeSmsApiUrl;
@@ -40,6 +44,10 @@ public class SmsService {
      */
     public boolean envoyerSms(String numeroDestinataire, String message) {
         try {
+            if (useFreeProvider) {
+                return smsProviderService.envoyerSmsGratuit(numeroDestinataire, message);
+            }
+
             return switch (smsProvider.toUpperCase()) {
                 case "ORANGE_SMS" -> envoyerSmsOrange(numeroDestinataire, message);
                 case "TWILIO" -> envoyerSmsTwilio(numeroDestinataire, message);
