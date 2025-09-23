@@ -3,13 +3,14 @@ package com.groupe2_ionic.eduka.dto;
 import com.groupe2_ionic.eduka.models.enums.MethodePaiement;
 import com.groupe2_ionic.eduka.models.enums.StatutPaiement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class PaiementResponseDto {
     private int id;
     private BigDecimal montant;
