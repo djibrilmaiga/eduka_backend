@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,4 +76,12 @@ public class Enfant {
     @ManyToOne
     @JoinColumn(name = "id_organisation")
     private Organisation organisation;
+
+    // Méthode utilitaire pour calculer l’âge
+    public int getAge() {
+        if (dateNaissance == null) {
+            return 0; // ou lever une exception
+        }
+        return Period.between(dateNaissance, LocalDate.now()).getYears();
+    }
 }
