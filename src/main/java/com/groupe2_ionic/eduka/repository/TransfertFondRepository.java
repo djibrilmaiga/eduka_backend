@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface TransfertFondRepository extends JpaRepository<TransfertFond, Integer>{
+public interface TransfertFondRepository extends JpaRepository<TransfertFond, Integer> {
 
     List<TransfertFond> findByOrganisationIdOrderByDateDemandeDesc(int organisationId);
     Page<TransfertFond> findByOrganisationId(int organisationId, Pageable pageable);

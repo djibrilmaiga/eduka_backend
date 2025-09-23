@@ -31,6 +31,13 @@ public class Paiement {
     @Column(nullable = false)
     private LocalDate datePaiement;
 
+    private String transactionId; // ID de transaction externe (Stripe, PayPal, etc.)
+    private String paymentIntentId; // ID d'intention de paiement (Stripe)
+    private String numeroTelephone; // Numéro de téléphone pour Mobile Money
+    private String codeConfirmation; // Code de confirmation pour Mobile Money
+    private String messageErreur; // Message d'erreur en cas d'échec
+    private String metadonnees; // Métadonnées JSON pour informations supplémentaires
+
     // Un paiement n'est effectué que par un seul parrain.
     @ManyToOne
     @JoinColumn(name = "id_parrain")

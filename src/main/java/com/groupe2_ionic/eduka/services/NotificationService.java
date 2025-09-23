@@ -8,8 +8,9 @@ import com.groupe2_ionic.eduka.models.Utilisateur;
 import com.groupe2_ionic.eduka.repository.NotificationRepository;
 import com.groupe2_ionic.eduka.repository.UtilisateurRepository;
 import com.groupe2_ionic.eduka.services.utilitaires.EmailService;
+import com.groupe2_ionic.eduka.services.utilitaires.SmsService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,27 +21,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final EmailService emailService;
-
-    @Autowired
-    public NotificationService(NotificationRepository notificationRepository,
-                               UtilisateurRepository utilisateurRepository,
-                               EmailService emailService) {
-        this.notificationRepository = notificationRepository;
-        this.utilisateurRepository = utilisateurRepository;
-        this.emailService = emailService;
-    }
+    private final SmsService smsService;
 
     /**
      * Crée une notification pour un utilisateur et envoie un email.
-     *
-     * @param utilisateur L'utilisateur à notifier.
-     * @param sujet       Le sujet de la notification.
-     * @param message     Le message de la notification.
      */
     public NotificationResponseDto createNotification(Utilisateur utilisateur, String sujet, String message) {
         // Vérification de l'existence de l'utilisateur
@@ -61,6 +51,76 @@ public class NotificationService {
         );
 
         return mapToResponseDto(savedNotification);
+    }
+
+    /**
+     * Envoie une notification complète (email + SMS + base de données)
+     */
+    public NotificationResponseDto envoyerNotification(Utilisateur utilisateur, String sujet, String message) {
+        return envoyerNotification(utilisateur, sujet, message, true, true);
+    }
+
+    /**
+     * Envoie une notification avec options personnalisées
+     */
+    public NotificationResponseDto envoyerNotification(Utilisateur utilisateur, String sujet, String message,
+                                                       boolean envoyerEmail, boolean envoyerSms) {
+        // Créer la notification en base
+        Notification notification = new Notification();
+        notification.setDestinataire(utilisateur);
+        notification.setSujet(sujet);
+        notification.setMessage(message);
+        notification.setDate(LocalDate.now());
+        notification.setLu(false);
+
+        Notification savedNotification = notificationRepository.save(notification);
+
+        // Envoyer par email si demandé
+        if (envoyerEmail) {
+            if (utilisateur instanceof Parrain) {
+                Parrain parrain = (Parrain) utilisateur;
+                emailService.envoyerEmailHtml(utilisateur.getEmail(), sujet, message, null);
+            } else if (utilisateur instanceof Organisation) {
+                Organisation org = (Organisation) utilisateur;
+                emailService.envoyerEmailHtml(utilisateur.getEmail(), sujet, message, null);
+            } else {
+                emailService.envoyerEmail(utilisateur.getEmail(), sujet, message);
+            }
+        }
+
+        // Envoyer par SMS si demandé et numéro disponible
+        if (envoyerSms && utilisateur.getTelephone() != null) {
+            smsService.envoyerSms(utilisateur.getTelephone(), message);
+        }
+
+        return mapToResponseDto(savedNotification);
+    }
+
+    /**
+     * Envoie une notification de bienvenue
+     */
+    public void envoyerNotificationBienvenue(Utilisateur utilisateur) {
+        String nom = "";
+        String typeUtilisateur = "";
+
+        if (utilisateur instanceof Parrain) {
+            Parrain parrain = (Parrain) utilisateur;
+            nom = parrain.getPrenom() + " " + parrain.getNom();
+            typeUtilisateur = "parrain";
+        } else if (utilisateur instanceof Organisation) {
+            Organisation org = (Organisation) utilisateur;
+            nom = org.getNom();
+            typeUtilisateur = "organisation";
+        }
+
+        String sujet = "Bienvenue sur EduKa !";
+        String message = String.format("Bienvenue %s ! Votre inscription en tant que %s a été confirmée.", nom, typeUtilisateur);
+
+        // Envoyer email de bienvenue avec template HTML
+        emailService.envoyerEmailBienvenue(utilisateur.getEmail(), nom, typeUtilisateur);
+
+        // Créer notification en base
+        envoyerNotification(utilisateur, sujet, message, false, true);
     }
 
     /**

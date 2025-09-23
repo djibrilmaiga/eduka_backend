@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.groupe2_ionic.eduka.models.enums.StatutValidation;
 
 @Entity @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @PrimaryKeyJoinColumn(name = "id_organisation")
@@ -28,6 +31,14 @@ public class Organisation extends Utilisateur{
     private String ville;
 
     private String pays;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatutValidation statutValidation = StatutValidation.EN_ATTENTE;
+
+    private String commentaireValidation;
+
+    private LocalDateTime dateValidation;
 
     // Une organisation est validé par un admin.
     @ManyToOne

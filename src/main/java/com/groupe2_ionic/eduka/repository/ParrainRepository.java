@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface ParrainRepository extends JpaRepository<Parrain, Integer> {
+
     Optional<Parrain> findByEmail(String email);
     Optional<Parrain> findByTelephone(String telephone);
 
@@ -19,4 +21,6 @@ public interface ParrainRepository extends JpaRepository<Parrain, Integer> {
 
     @Query("SELECT p FROM Parrain p WHERE p.ville = :ville AND p.actif = true")
     List<Parrain> findByVilleAndActif(@Param("ville") String ville);
+
+    long countByDateInscriptionBetween(LocalDate dateDebut, LocalDate dateFin);
 }

@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface EnfantRepository extends JpaRepository<Enfant, Integer> {
+
     @Query("SELECT e FROM Enfant e WHERE e.statutParrainage = false")
     Page<Enfant> findEnfantsDisponibles(Pageable pageable);
 
@@ -38,4 +40,6 @@ public interface EnfantRepository extends JpaRepository<Enfant, Integer> {
     long countByOrganisationId(int organisationId);
     long countByOrganisationIdAndStatutParrainageTrue(int organisationId);
     long countByOrganisationIdAndStatutParrainageFalse(int organisationId);
+
+    long countByDateInscriptionBetween(LocalDate dateDebut, LocalDate dateFin);
 }
