@@ -37,8 +37,17 @@ public class EnfantDto {
     
     @NotNull(message = "L'ID de l'organisation est obligatoire")
     private Integer organisationId;
-    
+
+    // Infos du tuteur
     private Integer tuteurId;
+    private String nomTuteur;
+    private String prenomTuteur;
+    private String telephoneTuteur;
+
+    // Infos de l'école
     private Integer ecoleId;
+    private String nomEcole;
+    private String villeEcole;
+    private String paysEcole;
     private Boolean consentementPedagogique = false;
 }
