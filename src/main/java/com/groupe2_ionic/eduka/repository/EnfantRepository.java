@@ -41,5 +41,5 @@ public interface EnfantRepository extends JpaRepository<Enfant, Integer> {
     long countByOrganisationIdAndStatutParrainageTrue(int organisationId);
     long countByOrganisationIdAndStatutParrainageFalse(int organisationId);
 
-    long countByDateInscriptionBetween(LocalDate dateDebut, LocalDate dateFin);
+    // long countByDateInscriptionBetween(LocalDate dateDebut, LocalDate dateFin);
 }

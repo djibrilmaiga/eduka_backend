@@ -166,7 +166,8 @@ public class AdminService {
     public RapportGlobalDto genererRapportGlobal(LocalDate dateDebut, LocalDate dateFin) {
         // Statistiques générales
         long nombreOrganisations = organisationRepository.countByStatutValidation(StatutValidation.VALIDEE);
-        long nombreEnfants = enfantRepository.countByDateInscriptionBetween(dateDebut, dateFin);
+        long nombreEnfants = 0L;
+                // enfantRepository.countByDateInscriptionBetween(dateDebut, dateFin);
         long nombreParrains = parrainRepository.countByDateInscriptionBetween(dateDebut, dateFin);
         long nombrePaiements = paiementRepository.countByDatePaiementBetween(dateDebut, dateFin);
 
