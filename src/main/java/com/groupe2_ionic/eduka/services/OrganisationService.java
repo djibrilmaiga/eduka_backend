@@ -27,7 +27,6 @@ public class OrganisationService {
     private final BesoinRepository besoinRepository;
     private final DepenseRepository depenseRepository;
     private final RapportRepository rapportRepository;
-    private final DocumentRepository documentRepository;
     private final TransfertFondRepository transfertFondRepository;
     private final NotificationService notificationService;
 
@@ -110,12 +109,15 @@ public class OrganisationService {
      * Créer un besoin pour un enfant
      */
     public BesoinResponseDto creerBesoin(int organisationId, BesoinDto besoinDto) {
-        Organisation organisation = organisationRepository.findById(organisationId)
-                .orElseThrow(() -> new RuntimeException("Organisation non trouvée"));
+        // Vérifie l'existence de l'organisation
+        if(!organisationRepository.existsById(organisationId)){
+            throw  new RuntimeException("Organisation non trouvée");
+        }
 
         Enfant enfant = enfantRepository.findById(besoinDto.getEnfantId())
                 .orElseThrow(() -> new RuntimeException("Enfant non trouvé"));
 
+        // Vérifie que l'enfant est enregistré par l'organisation.
         if (!(enfant.getOrganisation().getId() == (organisationId))) {
             throw new RuntimeException("Cet enfant n'appartient pas à votre organisation");
         }
@@ -257,8 +259,10 @@ public class OrganisationService {
      */
     @Transactional(readOnly = true)
     public OrganisationDashboardDto obtenirTableauDeBord(int organisationId) {
-        Organisation organisation = organisationRepository.findById(organisationId)
-                .orElseThrow(() -> new RuntimeException("Organisation non trouvée"));
+        // Vérifie l'existence de l'organisation.
+        if (!organisationRepository.existsById(organisationId)){
+            throw new RuntimeException("Organisation non trouvée");
+        }
 
         OrganisationDashboardDto dashboard = new OrganisationDashboardDto();
         dashboard.setNombreEnfants(enfantRepository.countByOrganisationId(organisationId));
