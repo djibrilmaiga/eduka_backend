@@ -22,6 +22,7 @@ public interface DepenseRepository extends JpaRepository<Depense, Integer> {
 
     Page<Depense> findByEnfantIdInOrderByDateEnregistrementDesc(List<Integer> enfantIds, Pageable pageable);
     long countByEnfantIdIn(List<Integer> enfantIds);
+    Page<Depense> findByEnfantId(int enfantId, Pageable pageable);
 
     @Query("SELECT SUM(d.montant) FROM Depense d WHERE d.organisation.id = :organisationId")
     BigDecimal sumMontantByOrganisationId(@Param("organisationId") int organisationId);

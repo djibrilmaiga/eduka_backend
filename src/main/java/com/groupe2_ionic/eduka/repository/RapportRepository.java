@@ -20,7 +20,9 @@ public interface RapportRepository extends JpaRepository<Rapport, Integer> {
     List<Rapport> findByDateBetween(LocalDate dateDebut, LocalDate dateFin);
     List<Rapport> findByOrganisationIdAndDateBetween(int organisationId, LocalDate dateDebut, LocalDate dateFin);
 
+    Page<Rapport> findByEnfantId(int enfantId, Pageable pageable);
     Page<Rapport> findByEnfantIdInOrderByDateDesc(List<Integer> enfantIds, Pageable pageable);
+    Page<Rapport> findByTypeRapport(String typeRapport, Pageable pageable);
     long countByEnfantIdIn(List<Integer> enfantIds);
 
     Long countByOrganisationId(int organisationId);

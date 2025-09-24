@@ -16,6 +16,7 @@ public interface TransfertFondRepository extends JpaRepository<TransfertFond, In
 
     List<TransfertFond> findByOrganisationIdOrderByDateDemandeDesc(int organisationId);
     Page<TransfertFond> findByOrganisationId(int organisationId, Pageable pageable);
+    Page<TransfertFond> findByStatut(StatutTransfert statut, Pageable pageable);
 
     List<TransfertFond> findByStatut(StatutTransfert statut);
     List<TransfertFond> findByOrganisationIdAndStatut(int organisationId, StatutTransfert statut);
@@ -45,4 +46,8 @@ public interface TransfertFondRepository extends JpaRepository<TransfertFond, In
 
     @Query("SELECT t FROM TransfertFond t WHERE t.statut = 'EN_ATTENTE' AND t.parrain.id = :parrainId")
     List<TransfertFond> findTransfertsEnAttenteParrain(@Param("parrainId") int parrainId);
+
+    List<TransfertFond> findByStatutOrderByDateDemandeAsc(StatutTransfert statutTransfert);
+
+    Page<TransfertFond> findByParrainId(int parrainId, Pageable pageable);
 }
