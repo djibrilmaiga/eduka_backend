@@ -14,6 +14,8 @@ public interface ParrainageRepository extends JpaRepository<Parrainage, Integer>
 
     List<Parrainage> findByEnfantIdOrderByDateDebutDesc(int enfantId);
 
+    List<Parrainage> findByParrainIdAndStatutOrderByDateDebutDesc(int parrainId, StatutParrainage statutParrainage);
+
     List<Parrainage> findByStatut(StatutParrainage statut);
 
     @Query("SELECT p FROM Parrainage p WHERE p.parrain.id = :parrainId AND p.statut = :statut")
@@ -36,4 +38,5 @@ public interface ParrainageRepository extends JpaRepository<Parrainage, Integer>
 
     @Query("SELECT COUNT(p) FROM Parrainage p WHERE p.parrain.id = :parrainId AND p.statut = :statut")
     long countByParrainIdAndStatut(@Param("parrainId") int parrainId, @Param("statut") StatutParrainage statut);
+
 }

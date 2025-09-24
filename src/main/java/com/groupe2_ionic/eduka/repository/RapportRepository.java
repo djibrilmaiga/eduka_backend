@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface RapportRepository extends JpaRepository<Rapport, Integer> {
+
     List<Rapport> findByOrganisationIdOrderByDateDesc(int organisationId);
     Page<Rapport> findByOrganisationId(int organisationId, Pageable pageable);
     List<Rapport> findByEnfantId(int enfantId);
@@ -23,4 +25,6 @@ public interface RapportRepository extends JpaRepository<Rapport, Integer> {
 
     Long countByOrganisationId(int organisationId);
     Long countByEnfantId(int enfantId);
+
+    Optional<Rapport> findFirstByEnfantIdOrderByDateDesc(int id);
 }

@@ -7,8 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface BesoinRepository extends JpaRepository<Besoin, Integer> {
+
     List<Besoin> findByEnfantId(int enfantId);
     List<Besoin> findByEnfantOrganisationId(int organisationId);
     List<Besoin> findByType(String type);
@@ -20,4 +22,6 @@ public interface BesoinRepository extends JpaRepository<Besoin, Integer> {
     BigDecimal sumMontantByOrganisationId(@Param("organisationId") int organisationId);
 
     Long countByEnfantOrganisationId(int organisationId);
+
+    List<Besoin> findByEnfantIdOrderByIdDesc(int id);
 }
