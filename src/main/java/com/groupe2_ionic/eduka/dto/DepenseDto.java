@@ -1,5 +1,6 @@
 package com.groupe2_ionic.eduka.dto;
 
+import com.groupe2_ionic.eduka.models.enums.TypeDepense;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 public class DepenseDto {
     
     @NotBlank(message = "Le type de dépense est obligatoire")
-    private String typeDepense;
+    private TypeDepense typeDepense;
     
     private String justificatif;
     

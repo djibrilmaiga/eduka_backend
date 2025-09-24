@@ -1,5 +1,6 @@
 package com.groupe2_ionic.eduka.dto;
 
+import com.groupe2_ionic.eduka.models.enums.TypeDepense;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class DepenseResponseDto {
     private int id;
-    private String typeDepense;
+    private TypeDepense typeDepense;
     private String justificatif;
     private BigDecimal montant;
     private LocalDate dateEnregistrement;
