@@ -2,10 +2,7 @@ package com.groupe2_ionic.eduka.controllers;
 
 import com.groupe2_ionic.eduka.dto.ValidationOrganisationDto;
 import com.groupe2_ionic.eduka.dto.ValidationResponseDto;
-import com.groupe2_ionic.eduka.dto.AdminDashboardDto;
 import com.groupe2_ionic.eduka.dto.RapportGlobalDto;
-import com.groupe2_ionic.eduka.dto.PaiementResponseDto;
-import com.groupe2_ionic.eduka.dto.TransfertFondResponseDto;
 import com.groupe2_ionic.eduka.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

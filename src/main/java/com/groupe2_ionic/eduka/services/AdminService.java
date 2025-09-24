@@ -1,17 +1,11 @@
 package com.groupe2_ionic.eduka.services;
 
-import com.groupe2_ionic.eduka.dto.AdminDashboardDto;
-import com.groupe2_ionic.eduka.dto.PaiementResponseDto;
 import com.groupe2_ionic.eduka.dto.RapportGlobalDto;
-import com.groupe2_ionic.eduka.dto.TransfertFondResponseDto;
 import com.groupe2_ionic.eduka.dto.ValidationOrganisationDto;
 import com.groupe2_ionic.eduka.dto.ValidationResponseDto;
 import com.groupe2_ionic.eduka.models.Admin;
 import com.groupe2_ionic.eduka.models.Organisation;
-import com.groupe2_ionic.eduka.models.Paiement;
-import com.groupe2_ionic.eduka.models.TransfertFond;
 import com.groupe2_ionic.eduka.models.enums.StatutPaiement;
-import com.groupe2_ionic.eduka.models.enums.StatutTransfert;
 import com.groupe2_ionic.eduka.models.enums.StatutValidation;
 import com.groupe2_ionic.eduka.repository.AdminRepository;
 import com.groupe2_ionic.eduka.repository.EnfantRepository;
