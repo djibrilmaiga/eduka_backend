@@ -1,5 +1,6 @@
 package com.groupe2_ionic.eduka.models;
 
+import com.groupe2_ionic.eduka.models.enums.TypeDepense;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,8 @@ public class Depense {
     private int id;
 
     @Column(nullable = false)
-    private String typeDepense;
+    @Enumerated(EnumType.STRING)
+    private TypeDepense typeDepense;
 
     @Column(columnDefinition = "TEXT")
     private String justificatif;
