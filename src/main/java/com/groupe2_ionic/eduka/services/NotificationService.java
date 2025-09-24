@@ -271,6 +271,87 @@ public class NotificationService {
         }*/
     }
 
+    /**
+     * Notifie un parrain lorsqu'une demande de transfert de fonds est initiée
+     */
+    public void notifierDemandeTransfertParent(TransfertFond transfert) {
+        if (transfert.getParrain() != null) {
+            String sujet = "Demande de transfert de fonds";
+            String message = String.format("Une demande de transfert de %s FCFA a été initiée. Motif: %s",
+                    transfert.getMontant(), transfert.getMotif());
+            envoyerNotification(transfert.getParrain(), sujet, message, true, true);
+        }
+    }
+
+    /**
+     * Notifie les parrains lorsqu'un nouveau rapport est disponible pour leur filleul(e)
+     */
+    public void notifierNouveauRapport(Rapport rapport) {
+        if (rapport.getEnfant() != null && rapport.getEnfant().getParrainages() != null) {
+            rapport.getEnfant().getParrainages().forEach(parrainage -> {
+                if (parrainage.getStatut() == com.groupe2_ionic.eduka.models.enums.StatutParrainage.ACTIF) {
+                    String sujet = "Nouveau rapport disponible";
+                    String message = String.format("Un nouveau rapport est disponible pour votre filleul(e) %s : %s",
+                            rapport.getEnfant().getPrenom() + " " + rapport.getEnfant().getNom(),
+                            rapport.getTitre());
+                    envoyerNotification(parrainage.getParrain(), sujet, message, true, false);
+                }
+            });
+        }
+    }
+
+    /**
+     * Notifie les parrains lorsqu'une nouvelle dépense est enregistrée pour leur filleul(e)
+     */
+    public void notifierNouvelleDepense(Depense depense) {
+        if (depense.getEnfant() != null && depense.getEnfant().getParrainages() != null) {
+            depense.getEnfant().getParrainages().forEach(parrainage -> {
+                if (parrainage.getStatut() == com.groupe2_ionic.eduka.models.enums.StatutParrainage.ACTIF) {
+                    String sujet = "Nouvelle dépense enregistrée";
+                    String message = String.format("Une nouvelle dépense a été enregistrée pour votre filleul(e) %s : %s (Montant: %s FCFA)",
+                            depense.getEnfant().getPrenom() + " " + depense.getEnfant().getNom(),
+                            depense.getTypeDepense(),
+                            depense.getMontant());
+                    envoyerNotification(parrainage.getParrain(), sujet, message, true, false);
+                }
+            });
+        }
+    }
+
+    /**
+     * Notifie les parrains lorsqu'un nouveau besoin est identifié pour leur filleul(e)
+     */
+    public void notifierNouveauBesoin(Besoin besoin) {
+        if (besoin.getEnfant() != null && besoin.getEnfant().getParrainages() != null) {
+            besoin.getEnfant().getParrainages().forEach(parrainage -> {
+                if (parrainage.getStatut() == com.groupe2_ionic.eduka.models.enums.StatutParrainage.ACTIF) {
+                    String sujet = "Nouveau besoin identifié";
+                    String message = String.format("Un nouveau besoin a été identifié pour votre filleul(e) %s : %s (Montant: %s FCFA)",
+                            besoin.getEnfant().getPrenom() + " " + besoin.getEnfant().getNom(),
+                            besoin.getType(),
+                            besoin.getMontant());
+                    envoyerNotification(parrainage.getParrain(), sujet, message, true, true);
+                }
+            });
+        }
+    }
+
+    /**
+     * Notifie les parrains potentiels lorsqu'un nouvel enfant est disponible
+     */
+    public void notifierNouvelEnfantDisponible(Enfant enfant) {
+        // Cette méthode pourrait notifier les parrains potentiels
+        // Pour l'instant, on la laisse vide ou on peut implémenter une logique spécifique
+    }
+
+    /**
+     * Notifie une organisation lors d'une nouvelle demande d'inscription
+     */
+    public void notifierNouvelleDemandeOrganisation(Organisation organisation) {
+        String sujet = "Demande d'inscription reçue";
+        String message = String.format("Votre demande d'inscription pour l'organisation %s a été reçue et est en cours de traitement.", organisation.getNom());
+        envoyerNotification(organisation, sujet, message);
+    }
 
     /**
      * Mappe une entité Notification vers un DTO de réponse
