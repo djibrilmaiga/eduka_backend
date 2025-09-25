@@ -184,4 +184,56 @@ public class EmailService {
      * Record pour les pièces jointes
      */
     public record PieceJointe(String nom, byte[] contenu, String typeContenu) {}
+
+    /**
+     * Envoie un email simple
+     */
+    public void sendSimpleMessage(String to, String subject, String text) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("noreply@eduka.com");
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(text);
+
+            javaMailSender.send(message);
+            log.info("Email envoyé avec succès à: {}", to);
+        } catch (Exception e) {
+            log.error("Erreur lors de l'envoi de l'email à {}: {}", to, e.getMessage());
+            throw new RuntimeException("Erreur lors de l'envoi de l'email", e);
+        }
+    }
+
+    /**
+     * Envoie un email de bienvenue
+     */
+    public void sendWelcomeEmail(String to, String name) {
+        String subject = "Bienvenue sur Eduka !";
+        String message = String.format(
+                "Bonjour %s,\n\n" +
+                        "Bienvenue sur la plateforme Eduka !\n\n" +
+                        "Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter " +
+                        "et commencer à utiliser nos services.\n\n" +
+                        "Cordialement,\n" +
+                        "L'équipe Eduka",
+                name
+        );
+
+        sendSimpleMessage(to, subject, message);
+    }
+
+    /**
+     * Envoie un email de notification de changement de mot de passe
+     */
+    public void sendPasswordChangeNotification(String to) {
+        String subject = "Mot de passe modifié - Eduka";
+        String message = "Bonjour,\n\n" +
+                "Votre mot de passe Eduka a été modifié avec succès.\n\n" +
+                "Si vous n'êtes pas à l'origine de cette modification, " +
+                "contactez immédiatement notre support.\n\n" +
+                "Cordialement,\n" +
+                "L'équipe Eduka";
+
+        sendSimpleMessage(to, subject, message);
+    }
 }
